@@ -10,7 +10,12 @@ Target: ~/.claude/CLAUDE.md on Nick's Mac (global, all projects). Approved 14 Oc
 - Model aliases: use the short aliases (opus, sonnet, haiku) so scripts follow the latest model. After a new generation ships, rerun the relevant quality gate before trusting the output.
 - Effort: leave at the default (medium). Raising effort costs more without improving care; max is a retry, never a default.
 - Routing: Opus for judgement (research, scoring, fit calls). Sonnet for well-scoped, checkable work. Haiku for mechanical checks, lookups and classification; keep Haiku context under 100k tokens (price jumps 5x above it).
-- Before a model or setup decision, run the claudecraft-last-60-days skill. Ignore advice older than the current model generation.
+- Before a model or setup decision, run the craft-last-60-days skill. Ignore advice older than the current model generation.
+
+## Building skills
+- Skill name: lowercase letters, digits and hyphens only, max 64 characters, and never the words "claude" or "anthropic" (claude.ai rejects them). Put a friendly title in the H1 instead.
+- Description: max 1024 characters, no XML or HTML tags. Folder name matches the skill name.
+- Before zipping or uploading any skill, run the validator (validate-skill.py) and fix every FAIL.
 
 ## Where sessions run
 - Default to Local, with Remote Control for access from phone or browser. Cloud only for repos already on GitHub, or unattended parallel jobs.
