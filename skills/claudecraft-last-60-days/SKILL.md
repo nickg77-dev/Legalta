@@ -43,19 +43,21 @@ Record: current behaviour, defaults, limits, prices, model names and release dat
 
 ### Phase 2: Experts (newsletters and public posts together)
 
-One pass per expert, using every channel they publish on. The roster, with Gmail sender addresses and web domains, is in `references/expert-roster.md`.
+One pass per expert, using every channel they publish on. The roster (Core sources with Weight, Gmail sender and web link; Excluded sources listed separately) is in `references/expert-roster.md`.
 
 1. **Gmail first (cheapest, already curated):** one search across all roster senders, inside and outside the `1. AI` label:
    ```
    newer_than:60d (from:sender1 OR from:sender2 ...) ([keyword1] OR [keyword2] OR [keyword3])
    ```
    Use 3 to 5 keywords and synonyms (e.g. for model choice: `opus sonnet haiku "model routing" subagent effort`). Previews only show the oldest messages, so call get_thread on every relevant hit and read the body.
-2. **Web, for each Tier 1 and Tier 2 name not already covered by Gmail:** `[name] [topic] [current year]` and `site:[their domain] [topic]`. Fetch the 3 to 6 most relevant posts in full.
+2. **Web, for each Core source not already covered by Gmail (highest Weight first):** `[name] [topic] [current year]` and `site:[their domain] [topic]`. Fetch the 3 to 6 most relevant posts in full.
 3. **Social:** X, Instagram, LinkedIn and Threads mostly block fetches. Use search snippets (`site:x.com [handle] [topic]`, `site:linkedin.com/posts [name] [topic]`) and label them snippet-level. If Claude in Chrome is available, use Grok as in last-90-days-cowork for X.
 
 For each position captured: one-line position, date, evidence type (TESTED with numbers / EXPERIENCE / OPINION / SPONSORED or affiliate), model or feature version referenced, link.
 
 ### Phase 3: Community signal
+
+If the `last-30-days` skill is available, run its Reddit and Hacker News steps on the topic, using this skill's recency window instead of 30 days, and skip the first two bullets below. Otherwise use them as written.
 
 - Reddit: `site:reddit.com/r/ClaudeAI [topic]`, `site:reddit.com/r/ClaudeCode [topic]`
 - Hacker News: `site:news.ycombinator.com [topic]`
@@ -72,7 +74,7 @@ Community posts count as one combined jury voice, not one vote each. Use them to
 4. Anthropic staff posts are primary for intent and roadmap, and biased on cost and on "use the bigger model".
 5. Recency: anything predating the current model generation is downgraded one level.
 6. Convergence across tiers (docs + practitioner + community) is the strongest signal. One loud voice is not consensus.
-7. Authority: each roster entry carries an Authority score (1 to 5) in `references/expert-roster.md`, the average of Reach (audience size, banded) and Signal (insider access and evidence quality). Use it to break ties and to order the consensus table, never to overrule rules 1 to 3: a TESTED post from a small author beats an OPINION from a large one. Refresh audience figures when they are more than 6 months old.
+7. Weight: each Core source carries a Weight (1 to 5) in `references/expert-roster.md`, calculated from reach and evidence quality (method in that file). Use it to order the consensus table and break ties, never to overrule rules 1 to 3: a TESTED post from a small author beats an OPINION from a large one. Ignore Excluded sources unless they are the only report of a launch. Refresh audience figures when they are more than 6 months old.
 
 ## Output
 

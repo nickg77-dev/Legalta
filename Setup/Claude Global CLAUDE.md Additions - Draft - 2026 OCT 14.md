@@ -13,7 +13,7 @@ Target: ~/.claude/CLAUDE.md on Nick's Mac (global, all projects). Approved 14 Oc
 - Before a model or setup decision, run the claudecraft-last-60-days skill. Ignore advice older than the current model generation.
 
 ## Where sessions run
-- Anything touching files on this Mac runs Local (or via Remote Control). Cloud only for repos already pushed to GitHub, or unattended parallel jobs.
+- Default to Local, with Remote Control for access from phone or browser. Cloud only for repos already on GitHub, or unattended parallel jobs.
 ```
 
 ## Prompt to paste into a Local Claude Code session
