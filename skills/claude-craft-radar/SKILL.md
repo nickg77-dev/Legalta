@@ -1,6 +1,6 @@
 ---
 name: claude-craft-radar
-description: "Expert-consensus research on how to use, configure and work with Claude (Claude Code, Cowork, claude.ai, skills, subagents, model choice, cloud vs local, MCP, CLAUDE.md, cost). Checks Anthropic's own docs first, then Nick's Gmail '1. AI' newsletters, then a curated roster of practitioners (Allie K. Miller, Ethan Mollick, Ruben Hassid, Simon Willison, Boris Cherny and others) and community threads, over the last 30 or 90 days. Returns a consensus table, a recommendation for Nick's actual task, confidence, and the contrarian view. Trigger on 'claude-craft on X', 'what do the experts say about [Claude question]', 'expert consensus on [Claude setup]', 'how are people setting up [Claude feature]', 'should I use Opus or Sonnet for X', 'cloud or local for X', or any how-should-I-work-with-Claude question where the answer depends on current practice rather than a single doc lookup. Do NOT use for general AI news or non-Claude topics (use last-30-days / last-90-days-browser)."
+description: "Expert-consensus research on how to use, configure and work with Claude (Claude Code, Cowork, claude.ai, skills, subagents, model choice, cloud vs local, MCP, CLAUDE.md, cost). Checks Anthropic's own docs first (which also sets the recency floor), then a curated expert roster across Nick's Gmail newsletters and their public posts (Allie K. Miller, Ethan Mollick, Ruben Hassid, Mariah Brunner, Simon Willison, Boris Cherny, Artificial Corner and others), then community threads. Default window 60 days; model questions are cut off at the current model generation's release. Returns a consensus table, a recommendation for Nick's actual task, confidence, and the contrarian view. Trigger on 'claude-craft on X', 'what do the experts say about [Claude question]', 'expert consensus on [Claude setup]', 'how are people setting up [Claude feature]', 'should I use Opus or Sonnet for X', 'cloud or local for X', or any how-should-I-work-with-Claude question where the answer depends on current practice rather than a single doc lookup. Do NOT use for general AI news or non-Claude topics (use last-30-days / last-90-days-browser)."
 ---
 
 # Claude Craft Radar
@@ -10,67 +10,64 @@ A last-90-days variant narrowed to one question type: "what is current best prac
 ## Inputs
 
 - **Question** (required). If vague, rewrite it into a decision ("Opus or Sonnet for the UK research batch?") and say so in one line.
-- **Window**: 30 or 90 days. Default 90, but weight the last 30 days double. Claude ships fast; advice older than the latest model or feature release is stale until shown otherwise.
 - **Task context** (optional): the real task the answer feeds (a tracker item, a script, a cost). If given, the final recommendation must be specific to it.
-- **Own evidence** (optional): any test results Nick already has (e.g. "quality gate: Sonnet 2/5, Opus 4/5, Opus +15% cost"). Ask once if the question is a model or setup choice and none is supplied.
+- **Own evidence** (optional): any test results Nick already has (e.g. "quality gate: Sonnet 2/5, Opus 4/5, Opus +15% cost"). Ask once if the question is a model or setup choice and none is supplied. Record WHEN the test ran and WHICH model version it used.
 
-Compute the cutoff date from today's date in context and use it in every phase.
+## Recency window
+
+Default: 60 days. Claude advice decays like milk, not wine.
+
+- **Model choice, pricing, effort, limits:** hard floor = the release date of the current model generation (find it in Phase 1). Anything older is STALE, however good. If the floor leaves fewer than 4 sources, say the evidence is thin rather than widening.
+- **Features and setup (cloud vs local, subagents, hooks, skills, CLAUDE.md):** 60 days, widen to 90 only if thin, and only for sources the current docs still agree with.
+- **Ways of working (planning, verification, delegation habits):** 90 days is fine; these change slowly.
+- Weight the most recent 30 days double in every case.
+
+Compute the cutoff from today's date in context and use it in every phase.
 
 ## Workflow
 
-Run Phases 1 to 4 in parallel (Agent subagents on a cheap model are fine for 3 and 4; see the model note at the end). Then Phase 5, then synthesise.
+Phase 1 first (it sets the recency floor). Then Phases 2 and 3 in parallel (Agent subagents on a cheaper model are fine for both; see the model note at the end). Then synthesise.
 
 ### Phase 1: Primary sources (the judge)
 
 Establish what is true right now before collecting opinions. Search and fetch:
 
 - Claude Code docs: `site:code.claude.com/docs [topic]` (sub-agents, settings, model config, cloud sessions, costs, hooks, skills)
-- Claude / API docs: `site:docs.claude.com [topic]` and model overview / pricing pages
-- Anthropic engineering blog and news: `site:anthropic.com/engineering [topic]`, `site:anthropic.com/news [topic]`
-- Claude Code changelog: `github.com/anthropics/claude-code` CHANGELOG.md and recent issues for the feature
+- Model pages and pricing: `site:platform.claude.com/docs [topic]`, `site:anthropic.com [model name]` launch posts, https://claude.com/pricing
+- Anthropic engineering blog: `site:anthropic.com/engineering [topic]`
+- Claude Code changelog and issues: `github.com/anthropics/claude-code`
+- Anthropic's own emails in Gmail (`from:email.claude.com newer_than:60d`)
 - If the `claude-code-guide` agent or `claude-api` skill is available, use it for the factual layer instead of raw search.
 
-Record: current behaviour, defaults, limits, prices, model names and release dates. Every later claim is checked against this. If an expert recommends something the docs say no longer works or has changed, mark it STALE.
+Record: current behaviour, defaults, limits, prices, model names and release dates (this sets the recency floor). Every later claim is checked against this. If an expert recommends something the docs say no longer works or has changed, mark it STALE.
 
-### Phase 2: Nick's newsletters (Gmail)
+### Phase 2: Experts (newsletters and public posts together)
 
-Search the Gmail label `1. AI` within the window:
+One pass per expert, using every channel they publish on. The roster, with Gmail sender addresses and web domains, is in `references/expert-roster.md`.
 
-```
-label:"1. AI" newer_than:90d ([keyword1] OR [keyword2] OR [keyword3])
-```
+1. **Gmail first (cheapest, already curated):** one search across all roster senders, inside and outside the `1. AI` label:
+   ```
+   newer_than:60d (from:sender1 OR from:sender2 ...) ([keyword1] OR [keyword2] OR [keyword3])
+   ```
+   Use 3 to 5 keywords and synonyms (e.g. for model choice: `opus sonnet haiku "model routing" subagent effort`). Previews only show the oldest messages, so call get_thread on every relevant hit and read the body.
+2. **Web, for each Tier 1 and Tier 2 name not already covered by Gmail:** `[name] [topic] [current year]` and `site:[their domain] [topic]`. Fetch the 3 to 6 most relevant posts in full.
+3. **Social:** X, Instagram, LinkedIn and Threads mostly block fetches. Use search snippets (`site:x.com [handle] [topic]`, `site:linkedin.com/posts [name] [topic]`) and label them snippet-level. If Claude in Chrome is available, use Grok as in last-90-days-cowork for X.
 
-Use 3 to 5 keywords and synonyms (e.g. for model choice: `opus sonnet haiku "model routing" subagent effort cost`). Search previews only show the oldest messages, so call get_thread on every relevant hit and read the body. Also run one search outside the label (`newer_than:90d from:(substack.com OR beehiiv.com) [keywords]`) to catch newsletters not yet filed. Senders and their signal tier are in `references/expert-roster.md`.
+For each position captured: one-line position, date, evidence type (TESTED with numbers / EXPERIENCE / OPINION / SPONSORED or affiliate), model or feature version referenced, link.
 
-### Phase 3: Expert roster (the jury)
-
-For each Tier 1 and Tier 2 name in `references/expert-roster.md`, run one targeted search:
-
-```
-[name] [topic keywords] [current year]
-site:[their domain] [topic keywords]
-```
-
-Fetch the 3 to 6 most relevant posts in full. For each, capture: position (one line), date, evidence type (TESTED with numbers / EXPERIENCE / OPINION / SPONSORED or affiliate), model or feature version referenced, link.
-
-Social platforms: X, Instagram, LinkedIn and Threads mostly block fetches. Use search snippets (`site:x.com [name] [topic]`, `site:linkedin.com/posts [name] [topic]`) and label them snippet-level. If Claude in Chrome is available, use Grok as in last-90-days-cowork for X; otherwise skip and say so.
-
-### Phase 4: Community signal
+### Phase 3: Community signal
 
 - Reddit: `site:reddit.com/r/ClaudeAI [topic]`, `site:reddit.com/r/ClaudeCode [topic]`
 - Hacker News: `site:news.ycombinator.com [topic]`
 - GitHub: `site:github.com/anthropics/claude-code/issues [topic]` (bugs and limits users actually hit)
+- Independent tested write-ups surfaced by search (benchmarks people ran on real work) count as TESTED if the method is stated.
 
 Community posts count as one combined jury voice, not one vote each. Use them to find failure modes the experts skip.
-
-### Phase 5: Gap fill
-
-If fewer than 4 independent dated sources take a position, widen to 90 days (if on 30), then to Tier 3, then to a general search. If still thin, say the consensus is thin rather than inventing one.
 
 ## Weighting rules
 
 1. Docs beat everyone on what the product does. They do not settle what is best for a task.
-2. Nick's own test data beats expert consensus for his own task, unless the sample is too small to mean anything (flag n < 10 explicitly and say what a bigger test would cost).
+2. Nick's own test data beats expert consensus for his own task, unless the sample is too small to mean anything (flag n < 10 explicitly and say what a bigger test would cost), or it was run on a model version that has since been replaced (check the test date against Phase 1 release dates).
 3. TESTED with numbers > EXPERIENCE > OPINION. SPONSORED counts zero.
 4. Anthropic staff posts are primary for intent and roadmap, and biased on cost and on "use the bigger model".
 5. Recency: anything predating the current model generation is downgraded one level.
@@ -85,7 +82,7 @@ Then paste the full brief in chat. Structure:
 
 ```markdown
 # [Question] - Claude Craft Radar
-Window: [start] to [end] | Sources: [n docs, n newsletters, n experts, n community]
+Window: [start] to [end] (floor: [reason]) | Sources: [n docs, n newsletters, n experts, n community]
 
 ## Answer
 2-4 sentences. The recommendation for Nick's task, the deciding reason, confidence %.
@@ -119,4 +116,4 @@ If a source repeatedly produced high-signal answers, or repeatedly produced nois
 
 ## Model note for subagents
 
-Phases 2 to 4 are retrieval and extraction: a Sonnet or Haiku subagent is enough. Run Phase 1 checking and the final synthesis on the strongest model available, since that is where judgement errors cost most.
+Phases 2 and 3 are retrieval and extraction: a Sonnet or Haiku subagent is enough. Run Phase 1 checking and the final synthesis on the strongest model available, since that is where judgement errors cost most.
