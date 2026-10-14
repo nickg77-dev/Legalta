@@ -49,9 +49,9 @@ On five rows, a 4/5 vs 2/5 split could be chance. If the two Sonnet misses were 
 2. Check the gate date. If the gate ran before 28 Sep, `--model sonnet` meant Sonnet 5, not 5.5, and the gate needs rerunning.
 3. To switch, paste this into a **Local** Claude Code session (the file sits on your Mac, so a cloud session cannot see it):
 
-   > In "Claude Macbook Folder/Projects/01 Work Projects/Legalta/2 Sales/DACH/legalta-enrichment/run-loop.sh", change --model sonnet to --model claude-opus-5-5 and leave effort at the default. Commit with the message: "Switch enrichment to Opus 5.5: quality gate 4/5 vs Sonnet 2/5 at about 15% more per batch."
+   > In "Claude Macbook Folder/Projects/01 Work Projects/Legalta/2 Sales/DACH/legalta-enrichment/run-loop.sh", change --model sonnet to --model opus and leave effort at the default. Commit with the message: "Switch enrichment to Opus 5.5: quality gate 4/5 vs Sonnet 2/5 at about 15% more per batch."
 
-   Pinning the full model ID instead of the `opus` alias stops the model changing silently partway through the UK campaign.
+   Superseded 14 Oct: Nick chose aliases over pinned IDs; rerun the gate when a new generation ships instead.
 4. Rerun the gate on 20 rows with Opus before the full UK batch. At about 15% more per batch the rerun costs little, and it shows whether 4/5 holds.
 
 ## Why this might be wrong
