@@ -1,0 +1,180 @@
+<title>ClaudeCraft Roster</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working sheet. Header with summary strip, a control bar, then a dense sortable ledger of sources. */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --ink:#15211d; --muted:#5b6a64; --line:#d9e0dc;
+  --accent:#1d5c8f; --accent-soft:#e2edf6; --heavy:#a4431b; --heavy-soft:#f8e7de;
+  --t0:#3d4b8f; --t1:#1d6b54; --t2:#8a6a12; --t3:#7b7f7d;
+  --meter-off:#e3e8e5;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#17201d; --ink:#e4ebe7; --muted:#97a69f; --line:#2a3632;
+  --accent:#7fb6e3; --accent-soft:#1c2c3a; --heavy:#f09a6e; --heavy-soft:#3a2219;
+  --t0:#a4adf0; --t1:#6fcfa9; --t2:#e2c066; --t3:#9aa09d; --meter-off:#2a3632; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#17201d; --ink:#e4ebe7; --muted:#97a69f; --line:#2a3632;
+  --accent:#7fb6e3; --accent-soft:#1c2c3a; --heavy:#f09a6e; --heavy-soft:#3a2219;
+  --t0:#a4adf0; --t1:#6fcfa9; --t2:#e2c066; --t3:#9aa09d; --meter-off:#2a3632; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:20px}
+header{display:grid;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0;text-wrap:balance}
+.lede{max-width:68ch;margin:0;color:var(--muted)}
+.lede a,.foot a{color:var(--accent)}
+.strip{display:flex;flex-wrap:wrap;gap:8px}
+.stat{display:flex;gap:8px;align-items:baseline;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:13px}
+.stat b{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.controls input[type=search]{flex:1 1 220px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 13px var(--body);padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip:focus-visible,.th-btn:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select{font:inherit;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+.ledger{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;min-width:860px}
+th{position:sticky;top:0;background:var(--surface);text-align:left;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding:0}
+.th-btn{all:unset;display:flex;gap:6px;align-items:center;padding:10px 12px;cursor:pointer;width:100%;box-sizing:border-box}
+.th-btn .arr{opacity:.35}
+th[aria-sort="ascending"] .arr,th[aria-sort="descending"] .arr{opacity:1;color:var(--accent)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+.name a{font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.name a:hover{border-color:var(--accent);color:var(--accent)}
+.name small{display:block;color:var(--muted);font-size:13px;margin-top:2px;max-width:42ch}
+.tier{font:500 12px var(--mono);padding:2px 8px;border-radius:6px;border:1px solid currentColor;white-space:nowrap}
+.tier[data-t="0"]{color:var(--t0)}.tier[data-t="1"]{color:var(--t1)}.tier[data-t="2"]{color:var(--t2)}.tier[data-t="3"]{color:var(--t3)}
+.heavy{display:inline-block;margin-top:6px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--heavy);background:var(--heavy-soft);padding:2px 7px;border-radius:4px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.reach small{display:block;color:var(--muted);font-family:var(--body);font-size:12px}
+.meter{display:flex;align-items:center;gap:8px}
+.cells{display:flex;gap:3px}
+.cells i{width:12px;height:12px;border-radius:2px;background:var(--meter-off)}
+.cells i.on{background:var(--accent)}
+.cells i.half{background:linear-gradient(90deg,var(--accent) 50%,var(--meter-off) 50%)}
+.rs{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.gmail{font-family:var(--mono);font-size:12px;word-break:break-all;color:var(--muted)}
+.copy{all:unset;cursor:pointer;font:500 11px var(--mono);color:var(--accent);margin-top:4px;display:inline-block}
+.status{font:500 11px var(--mono);letter-spacing:.04em}
+.status[data-s="VERIFIED"]{color:var(--t1)}.status[data-s="INFERRED"]{color:var(--muted)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.foot{display:grid;gap:8px;font-size:13px;color:var(--muted);max-width:80ch}
+.foot h2{font:600 14px var(--body);color:var(--ink);margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px}
+@media (prefers-reduced-motion:no-preference){tbody tr{transition:background .12s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ClaudeCraft last 60 days · source roster · audiences checked 14 Oct 2026</div>
+    <h1>Who the skill listens to, and how much</h1>
+    <p class="lede">Authority is the average of Reach (largest single channel) and Signal (insider access and evidence quality). It orders the jury; it never outranks Anthropic's docs or your own test data. Source file: <a href="https://github.com/nickg77-dev/Legalta/blob/claude/dreamy-darwin-79ipr4/skills/claudecraft-last-60-days/references/expert-roster.md">expert-roster.md</a> · <a href="https://github.com/nickg77-dev/Legalta/blob/claude/dreamy-darwin-79ipr4/skills/claudecraft-last-60-days/SKILL.md">SKILL.md</a></p>
+    <div class="strip" id="strip"></div>
+  </header>
+
+  <div class="controls" role="search">
+    <input type="search" id="q" placeholder="Search name, topic or sender" aria-label="Search sources">
+    <div class="chips" id="tierChips" aria-label="Filter by tier"></div>
+    <div class="chips">
+      <button class="chip" id="fHeavy" aria-pressed="false">Heavyweights</button>
+      <button class="chip" id="fGmail" aria-pressed="false">In my Gmail</button>
+    </div>
+    <label class="eyebrow" for="sortSel">Sort</label>
+    <select id="sortSel">
+      <option value="auth">Authority</option>
+      <option value="reachN">Reach</option>
+      <option value="s">Signal</option>
+      <option value="tier">Tier</option>
+      <option value="name">Name</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="ledger">
+    <table>
+      <thead><tr id="headRow"></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <section class="foot">
+    <h2>Scoring key</h2>
+    <div class="legend">
+      <span><b>Reach</b> 1 &lt;10K · 2 10-50K · 3 50-200K · 4 200K-1M · 5 1M+</span>
+      <span><b>Signal</b> 5 insider or research · 4 tested results · 3 practitioner · 2 adoption advice · 1 news or hype</span>
+    </div>
+    <p>Heavyweight is your call (Boris Cherny, Ethan Mollick, Ruben Hassid) and sits outside the formula. Substack figures are rounded floors including free subscribers; social figures are search snippets; Superhuman, The Rundown, Maverick and Allie K. Miller are self-reported. Tier 0 sources are the judge and carry no score.</p>
+  </section>
+</div>
+
+<script>
+const D=[
+ {name:"Claude Code docs",role:"Features, defaults, sub-agents, cloud sessions",tier:0,reach:"Primary",reachN:-1,r:null,s:null,auth:null,heavy:false,gmail:"",url:"https://code.claude.com/docs/en/sub-agents",status:"VERIFIED"},
+ {name:"Model and pricing docs",role:"Release dates, prices, default effort",tier:0,reach:"Primary",reachN:-1,r:null,s:null,auth:null,heavy:false,gmail:"",url:"https://platform.claude.com/docs/en/models/sonnet-5-5/overview",status:"VERIFIED"},
+ {name:"Anthropic launches and engineering blog",role:"Model positioning, patterns Anthropic uses",tier:0,reach:"Primary",reachN:-1,r:null,s:null,auth:null,heavy:false,gmail:"no-reply@email.claude.com",url:"https://www.anthropic.com/engineering",status:"VERIFIED"},
+ {name:"Claude Code changelog and issues",role:"What changed and when",tier:0,reach:"Primary",reachN:-1,r:null,s:null,auth:null,heavy:false,gmail:"",url:"https://github.com/anthropics/claude-code",status:"INFERRED"},
+ {name:"Boris Cherny",role:"Creator of Claude Code: parallel sessions, plan mode, verification loops",tier:1,reach:"596K",ch:"X",reachN:596e3,r:4,s:5,auth:4.5,heavy:true,gmail:"",url:"https://x.com/bcherny",status:"VERIFIED"},
+ {name:"Ethan Mollick",role:"One Useful Thing: research-backed, non-developer framing",tier:1,reach:"485K+",ch:"Newsletter",reachN:485e3,r:4,s:5,auth:4.5,heavy:true,gmail:"oneusefulthing@substack.com",url:"https://www.oneusefulthing.org",status:"VERIFIED"},
+ {name:"Allie K. Miller",role:"AI with Allie: business and operator workflows",tier:1,reach:"~2M",ch:"LinkedIn",reachN:2e6,r:5,s:3,auth:4,heavy:false,gmail:"aiwithallie@mail.beehiiv.com",url:"https://www.linkedin.com/in/alliekmiller",status:"VERIFIED"},
+ {name:"Simon Willison",role:"Hands-on, dated Claude Code writing; tests every release",tier:1,reach:"233K",ch:"X",reachN:233e3,r:4,s:4,auth:4,heavy:false,gmail:"",url:"https://simonwillison.net/tags/claude-code/",status:"VERIFIED"},
+ {name:"Ruben Hassid",role:"How to AI: practical Claude setup for non-coders",tier:1,reach:"985K+",ch:"Newsletter",reachN:985e3,r:4,s:3,auth:3.5,heavy:true,gmail:"ruben@substack.com",url:"https://ruben.substack.com",status:"VERIFIED"},
+ {name:"Mariah Brunner",role:"Learn AI With Mariah: 300+ Claude guides",tier:1,reach:"278K",ch:"Instagram",reachN:278e3,r:4,s:3,auth:3.5,heavy:false,gmail:"mariah@dreamtuesday.com",url:"https://learnaiwithmariah.com/guides/",status:"VERIFIED"},
+ {name:"Hamel Husain",role:"Evals: the lens for quality gates and model choice",tier:1,reach:"58K",ch:"X",reachN:58e3,r:3,s:4,auth:3.5,heavy:false,gmail:"",url:"https://x.com/HamelHusain",status:"VERIFIED"},
+ {name:"Peter Yang",role:"Behind the Craft: Claude Code for non-engineers",tier:1,reach:"154K+",ch:"Newsletter",reachN:154e3,r:3,s:3,auth:3,heavy:false,gmail:"",url:"https://creatoreconomy.so",status:"VERIFIED"},
+ {name:"Artificial Corner",role:"Frank Andrade: long-run Claude lessons, skills, Cowork setup",tier:1,reach:"90K+",ch:"Newsletter",reachN:90e3,r:3,s:3,auth:3,heavy:false,gmail:"artificialcorner@substack.com",url:"https://artificialcorner.com",status:"VERIFIED"},
+ {name:"Joozio",role:"Pawel Jozefiak: runs a live agent, publishes real costs and routing",tier:1,reach:"5.4K+",ch:"Newsletter",reachN:5400,r:1,s:4,auth:2.5,heavy:false,gmail:"joozio@substack.com",url:"https://thoughts.jock.pl",status:"VERIFIED"},
+ {name:"Kieran Klaassen / Every",role:"Compounding engineering, multi-agent Claude Code",tier:1,reach:"20K",ch:"X (Every unverified)",reachN:19705,r:2,s:3,auth:2.5,heavy:false,gmail:"",url:"https://every.to",status:"VERIFIED"},
+ {name:"Nate B. Jones",role:"Strategy and agent setup for operators",tier:2,reach:"~310K",ch:"YouTube",reachN:310e3,r:4,s:3,auth:3.5,heavy:false,gmail:"",url:"https://natesnewsletter.substack.com",status:"VERIFIED"},
+ {name:"Latent Space (swyx)",role:"Builder-level agent practice",tier:2,reach:"203K+",ch:"Newsletter",reachN:203e3,r:4,s:3,auth:3.5,heavy:false,gmail:"",url:"https://www.latent.space",status:"VERIFIED"},
+ {name:"Claire Vo",role:"How I AI podcast: guest workflow walkthroughs",tier:2,reach:"69K",ch:"X",reachN:68500,r:3,s:3,auth:3,heavy:false,gmail:"",url:"https://x.com/clairevo",status:"VERIFIED"},
+ {name:"paddo.dev",role:"Tested model and effort comparisons on real work",tier:2,reach:"Unknown",ch:"",reachN:0,r:1,s:4,auth:2.5,heavy:false,gmail:"",url:"https://paddo.dev",status:"VERIFIED"},
+ {name:"Zvi Mowshowitz",role:"Model release digests",tier:2,reach:"44K",ch:"X",reachN:44e3,r:2,s:3,auth:2.5,heavy:false,gmail:"",url:"https://thezvi.substack.com",status:"VERIFIED"},
+ {name:"AI Adopters Club",role:"Kamil Banc: operator and small-business adoption",tier:2,reach:"15K+",ch:"Newsletter",reachN:15e3,r:2,s:2,auth:2,heavy:false,gmail:"aiadopters@substack.com",url:"https://aiadopters.club",status:"VERIFIED"},
+ {name:"Prosper in AI",role:"Ilia Karelin: CLAUDE.md and instruction architecture",tier:2,reach:"3.9K+",ch:"Newsletter",reachN:3900,r:1,s:2,auth:1.5,heavy:false,gmail:"prosperinai@substack.com",url:"https://prosperinai.substack.com",status:"VERIFIED"},
+ {name:"Superhuman AI",role:"Zain Kahn: daily news",tier:3,reach:"1.25M to 2M",ch:"Newsletter, self-reported",reachN:1.25e6,r:5,s:1,auth:3,heavy:false,gmail:"superhuman@mail.joinsuperhuman.ai",url:"https://www.superhuman.ai",status:"VERIFIED"},
+ {name:"The Rundown AI",role:"Daily news",tier:3,reach:"1.7M",ch:"Newsletter, self-reported",reachN:1.7e6,r:5,s:1,auth:3,heavy:false,gmail:"news@daily.therundown.ai",url:"https://www.therundown.ai",status:"VERIFIED"},
+ {name:"Maverick Maltin",role:"@mavgpt: Instagram creator, hype-heavy",tier:3,reach:"1.4M",ch:"Instagram",reachN:1.4e6,r:5,s:1,auth:3,heavy:false,gmail:"maverick@maltin.com",url:"https://www.instagram.com/mavgpt/",status:"VERIFIED"},
+ {name:"Wonder Tools",role:"Jeremy Caplan: tool round-ups",tier:3,reach:"92K+",ch:"Newsletter",reachN:92e3,r:3,s:2,auth:2.5,heavy:false,gmail:"wondertools@substack.com",url:"https://wondertools.substack.com",status:"VERIFIED"},
+ {name:"LearnAIWithMe",role:"Gencay: build-in-public, clickbait framing",tier:3,reach:"17K+",ch:"Newsletter",reachN:17e3,r:2,s:1,auth:1.5,heavy:false,gmail:"gencay@substack.com",url:"https://substack.com/@gencay",status:"VERIFIED"}
+];
+const TIER_LABEL={0:"Tier 0 · Judge",1:"Tier 1 · Core",2:"Tier 2 · Useful",3:"Tier 3 · News"};
+const COLS=[["name","Source"],["tier","Tier"],["reachN","Reach"],["auth","Authority"],["s","R / S"],["gmail","Gmail sender"],["status","Link"]];
+const st={q:"",tiers:new Set([0,1,2,3]),heavy:false,gmail:false,sort:"auth",dir:-1};
+try{const saved=JSON.parse(localStorage.getItem("ccRoster")||"null");if(saved){st.sort=saved.sort||st.sort;st.dir=saved.dir||st.dir}}catch(e){}
+const $=id=>document.getElementById(id);
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function meter(v){if(v==null)return '<span class="rs">Judge</span>';let h="";for(let i=1;i<=5;i++){h+=`<i class="${v>=i?"on":(v>=i-.5?"half":"")}"></i>`}return `<div class="meter"><span class="cells" aria-hidden="true">${h}</span><span class="num">${v.toFixed(1)}</span></div>`}
+function strip(){const n=t=>D.filter(d=>d.tier===t).length;$("strip").innerHTML=[["Sources",D.length],["Judge",n(0)],["Core",n(1)],["Useful",n(2)],["News",n(3)],["Heavyweights",D.filter(d=>d.heavy).length],["In Gmail",D.filter(d=>d.gmail).length]].map(([k,v])=>`<span class="stat">${k} <b>${v}</b></span>`).join("")}
+function chips(){$("tierChips").innerHTML=[0,1,2,3].map(t=>`<button class="chip" data-t="${t}" aria-pressed="${st.tiers.has(t)}">${TIER_LABEL[t].split(" · ")[1]}</button>`).join("");$("tierChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const t=+b.dataset.t;st.tiers.has(t)?st.tiers.delete(t):st.tiers.add(t);b.setAttribute("aria-pressed",st.tiers.has(t));render()})}
+function head(){$("headRow").innerHTML=COLS.map(([k,l])=>{const s=st.sort===k?(st.dir>0?"ascending":"descending"):"none";return `<th aria-sort="${s}"><button class="th-btn" data-k="${k}">${l}<span class="arr">${s==="ascending"?"↑":s==="descending"?"↓":"↕"}</span></button></th>`}).join("");$("headRow").querySelectorAll(".th-btn").forEach(b=>b.onclick=()=>setSort(b.dataset.k))}
+function setSort(k){if(st.sort===k)st.dir*=-1;else{st.sort=k;st.dir=(k==="name"||k==="tier"||k==="gmail"||k==="status")?1:-1}$("sortSel").value=["auth","reachN","s","tier","name"].includes(k)?k:$("sortSel").value;try{localStorage.setItem("ccRoster",JSON.stringify({sort:st.sort,dir:st.dir}))}catch(e){}render()}
+function val(d,k){const v=d[k];if(v==null)return k==="name"||k==="gmail"||k==="status"?"":-99;return typeof v==="string"?v.toLowerCase():v}
+function render(){head();const q=st.q.trim().toLowerCase();let rows=D.filter(d=>st.tiers.has(d.tier)&&(!st.heavy||d.heavy)&&(!st.gmail||d.gmail)&&(!q||(d.name+" "+d.role+" "+d.gmail+" "+(d.ch||"")).toLowerCase().includes(q)));
+rows.sort((a,b)=>{const x=val(a,st.sort),y=val(b,st.sort);if(x<y)return -st.dir;if(x>y)return st.dir;return (b.auth||0)-(a.auth||0)});
+$("count").textContent=`${rows.length} of ${D.length} shown`;
+$("rows").innerHTML=rows.length?rows.map(d=>`<tr>
+<td class="name"><a href="${d.url}" target="_blank" rel="noopener">${esc(d.name)}</a><small>${esc(d.role)}</small>${d.heavy?'<span class="heavy">Heavyweight</span>':""}</td>
+<td><span class="tier" data-t="${d.tier}">${TIER_LABEL[d.tier].split(" · ")[1]}</span></td>
+<td class="reach"><span class="num">${esc(d.reach)}</span>${d.ch?`<small>${esc(d.ch)}</small>`:""}</td>
+<td>${meter(d.auth)}</td>
+<td class="rs">${d.r==null?"-":`R${d.r} · S${d.s}`}</td>
+<td class="gmail">${d.gmail?`${esc(d.gmail)}<br><button class="copy" data-g="${esc(d.gmail)}">Copy</button>`:"-"}</td>
+<td><span class="status" data-s="${d.status}">${d.status}</span></td></tr>`).join(""):`<tr><td colspan="7" class="empty">No sources match. Clear the search or switch a tier back on.</td></tr>`;
+$("rows").querySelectorAll(".copy").forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.g);b.textContent="Copied"}catch(e){const r=document.createRange();r.selectNodeContents(b.previousSibling.previousSibling||b.parentNode);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected"}setTimeout(()=>b.textContent="Copy",1500)})}
+$("q").oninput=e=>{st.q=e.target.value;render()};
+$("fHeavy").onclick=e=>{st.heavy=!st.heavy;e.target.setAttribute("aria-pressed",st.heavy);render()};
+$("fGmail").onclick=e=>{st.gmail=!st.gmail;e.target.setAttribute("aria-pressed",st.gmail);render()};
+$("sortSel").onchange=e=>{st.sort=e.target.value;st.dir=(st.sort==="name"||st.sort==="tier")?1:-1;render()};
+$("sortSel").value=["auth","reachN","s","tier","name"].includes(st.sort)?st.sort:"auth";
+strip();chips();render();
+</script>
