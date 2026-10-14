@@ -1,4 +1,4 @@
-# Expert roster - Claude Craft Radar
+# Expert roster - ClaudeCraft last 60 days
 
 Edit freely. Tier sets search order and weight. Gmail sender is what to put in the `from:` search; web is where to search when Gmail has nothing.
 Link status: VERIFIED (resolved on 2026 OCT 14), INFERRED (from Gmail sender or a standard URL pattern, not yet fetched).

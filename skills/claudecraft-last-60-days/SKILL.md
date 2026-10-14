@@ -1,11 +1,11 @@
 ---
-name: claude-craft-radar
-description: "Expert-consensus research on how to use, configure and work with Claude (Claude Code, Cowork, claude.ai, skills, subagents, model choice, cloud vs local, MCP, CLAUDE.md, cost). Checks Anthropic's own docs first (which also sets the recency floor), then a curated expert roster across Nick's Gmail newsletters and their public posts (Allie K. Miller, Ethan Mollick, Ruben Hassid, Mariah Brunner, Simon Willison, Boris Cherny, Artificial Corner and others), then community threads. Default window 60 days; model questions are cut off at the current model generation's release. Returns a consensus table, a recommendation for Nick's actual task, confidence, and the contrarian view. Trigger on 'claude-craft on X', 'what do the experts say about [Claude question]', 'expert consensus on [Claude setup]', 'how are people setting up [Claude feature]', 'should I use Opus or Sonnet for X', 'cloud or local for X', or any how-should-I-work-with-Claude question where the answer depends on current practice rather than a single doc lookup. Do NOT use for general AI news or non-Claude topics (use last-30-days / last-90-days-browser)."
+name: claudecraft-last-60-days
+description: "Expert-consensus research on how to use, configure and work with Claude (Claude Code, Cowork, claude.ai, skills, subagents, model choice, cloud vs local, MCP, CLAUDE.md, cost). Checks Anthropic's own docs first (which also sets the recency floor), then a curated expert roster across Nick's Gmail newsletters and their public posts (Allie K. Miller, Ethan Mollick, Ruben Hassid, Mariah Brunner, Simon Willison, Boris Cherny, Artificial Corner and others), then community threads. Default window 60 days; model questions are cut off at the current model generation's release. Returns a consensus table, a recommendation for Nick's actual task, confidence, and the contrarian view. Trigger on 'ClaudeCraft last 60 days on X', 'claudecraft on X', 'what do the experts say about [Claude question]', 'expert consensus on [Claude setup]', 'how are people setting up [Claude feature]', 'should I use Opus or Sonnet for X', 'cloud or local for X', or any how-should-I-work-with-Claude question where the answer depends on current practice rather than a single doc lookup. Do NOT use for general AI news or non-Claude topics (use last-30-days / last-90-days-browser)."
 ---
 
-# Claude Craft Radar
+# ClaudeCraft last 60 days
 
-A last-90-days variant narrowed to one question type: "what is current best practice for working with Claude, and what should I do?" Think of it as a jury with a judge: Anthropic's docs are the judge (what the product actually does today), the expert roster is the jury (what works in practice), and Nick's own test data, when he has it, outranks both.
+A last-60-days variant narrowed to one question type: "what is current best practice for working with Claude, and what should I do?" Think of it as a jury with a judge: Anthropic's docs are the judge (what the product actually does today), the expert roster is the jury (what works in practice), and Nick's own test data, when he has it, outranks both.
 
 ## Inputs
 
@@ -72,16 +72,17 @@ Community posts count as one combined jury voice, not one vote each. Use them to
 4. Anthropic staff posts are primary for intent and roadmap, and biased on cost and on "use the bigger model".
 5. Recency: anything predating the current model generation is downgraded one level.
 6. Convergence across tiers (docs + practitioner + community) is the strongest signal. One loud voice is not consensus.
+7. Authority: each roster entry carries an Authority score (1 to 5) in `references/expert-roster.md`, the average of Reach (audience size, banded) and Signal (insider access and evidence quality). Use it to break ties and to order the consensus table, never to overrule rules 1 to 3: a TESTED post from a small author beats an OPINION from a large one. Refresh audience figures when they are more than 6 months old.
 
 ## Output
 
-Save to the visible Research folder (create `Research/Claude Craft/` if missing) as:
-`Claude Craft - [Short Question] - Research Brief - YYYY MMM DD.md`
+Save to the visible Research folder (create `Research/ClaudeCraft/` if missing) as:
+`ClaudeCraft - [Short Question] - Research Brief - YYYY MMM DD.md`
 
 Then paste the full brief in chat. Structure:
 
 ```markdown
-# [Question] - Claude Craft Radar
+# [Question] - ClaudeCraft last 60 days
 Window: [start] to [end] (floor: [reason]) | Sources: [n docs, n newsletters, n experts, n community]
 
 ## Answer

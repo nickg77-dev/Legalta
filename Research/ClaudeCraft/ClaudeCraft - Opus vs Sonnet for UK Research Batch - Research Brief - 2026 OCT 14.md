@@ -1,4 +1,4 @@
-# Opus vs Sonnet for the UK research batch (tracker item 2.1) - Claude Craft Radar
+# Opus vs Sonnet for the UK research batch (tracker item 2.1) - ClaudeCraft last 60 days
 
 Window: 22 Sep to 14 Oct 2026 (floor: Opus 5.5 release, start of the current model generation) | Sources: 4 Anthropic primary, 2 newsletters read in full, 3 expert posts, 2 independent tested write-ups, 1 community sweep
 
