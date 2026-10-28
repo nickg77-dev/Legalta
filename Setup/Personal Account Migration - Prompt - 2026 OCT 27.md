@@ -1,6 +1,6 @@
 # Personal Account Migration - Prompt - 2026 OCT 27
 
-Paste everything below the line into a new chat in the nickg77 PERSONAL Claude account (claude.ai, code execution on). Run it before migrating.
+Paste everything below the line into a new chat in the nickg77 PERSONAL Claude account (claude.ai, code execution on). Run it before migrating, after the Cowork harvest ("Personal Account Harvest - Cowork Prompt - 2026 OCT 28.md"). If the harvest already saved your skills and artefacts, tell Claude to skip A1 and B1.
 
 ---
 
